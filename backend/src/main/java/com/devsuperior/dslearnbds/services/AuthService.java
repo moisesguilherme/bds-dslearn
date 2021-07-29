@@ -18,8 +18,11 @@ public class AuthService {
 	
 	@Transactional(readOnly = true)
 	public User authenticated() {		
+		System.out.println(">>> authenticate: inicio ");
 		try {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			System.out.println(">>> authenticate: no try  " + username);
+			
 			return userRepository.findByEmail(username);
 		}
 		catch(Exception e) {
@@ -28,8 +31,11 @@ public class AuthService {
 	}
 	
 	public void validadeSelfOrAdmin(Long userId) {
+		System.out.println(">>> validadeSelfOrAdmin, userId:" + userId);
 		User user = authenticated();
+		System.out.println("<<< authenticated");
 		if(!user.getId().equals(userId) && !user.hasHole("ROLE_ADMIN")) {
+			System.out.println(">>> validadeSelfOrAdmin: " + user.getId() );
 			throw new ForbiddenException("Access denied");	
 		}
 	}
